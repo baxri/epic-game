@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { configureChains, mainnet, createClient, WagmiConfig } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+
+import HomeScreen from "./components/HomeScreen";
+import { GameProvider } from "./context";
+
+const { provider, webSocketProvider } = configureChains(
+  [mainnet],
+  [publicProvider()]
+);
+
+const client = createClient({
+  autoConnect: true,
+  provider,
+  webSocketProvider,
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <WagmiConfig client={client}>
+      <GameProvider>
+        <div className="h-screen bg-ellie-background bg-cover bg-center">
+          <HomeScreen />
+        </div>
+      </GameProvider>
+    </WagmiConfig>
   );
 }
 
