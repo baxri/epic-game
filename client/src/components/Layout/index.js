@@ -30,7 +30,7 @@ export default function Layout({ children, isArena }) {
         }
       )}
     >
-      <div className="flex justify-between p-4">
+      <div className="flex justify-between p-4 mb-20">
         <h1 className="text-white font-bold text-4xl branded-text ">
           THE LAST OF <span className="text-primary">NFT</span>
         </h1>
@@ -59,7 +59,37 @@ export default function Layout({ children, isArena }) {
           </button>
         </div>
       </div>
-      {isConnected && children}
+      {isConnected ? (
+        children
+      ) : (
+        <div className="flex max-w-4xl m-auto gap-4 flex-col px-4">
+          <p className="text-center text-white branded-text text-2xl">
+            Immerse yourself in the world of "The Last of Us" with this
+            thrilling game, where you can choose your character - Joel, Ellie or
+            Abby - and engage in a battle against the formidable Bloater. Your
+            success depends on your attack strategy, as you can either gain or
+            lose HP points. Should you lose all your HP, fear not, as you can
+            purchase new ones and continue the fight against the Bloater.
+          </p>
+
+          <p className="text-center text-white branded-text text-2xl">
+            Every character will possess the status of a non-fungible token
+            (NFT) with comprehensive functionalities, including the ability to
+            send and transfer, as well as view their health points on the
+            OpenSea platform. Sounds good? :)
+          </p>
+          <div className="flex justify-center">
+            <button
+              onClick={handleConnection}
+              className="mt-10 bg-primary px-6 py-3 text-white branded-text rounded text-xl"
+            >
+              {isConnected
+                ? address.slice(0, 6) + "..." + address.slice(38, 42)
+                : "Get started"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
