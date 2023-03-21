@@ -8,7 +8,7 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function useAccount() {
   const { address, isConnected } = useWagmiAccount();
-  const { data: ensName } = useEnsName({ address });
+  // const { data: ensName } = useEnsName({ address });
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -17,7 +17,7 @@ export default function useAccount() {
 
   return {
     address,
-    ensName,
+    // ensName,
     disconnect,
     connect,
     isConnected,

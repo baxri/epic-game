@@ -5,6 +5,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Lalezar&family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
 
 body {
+  /* background-color: black;
+  background-image: url("https://images3.alphacoders.com/106/1065466.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center; */
+
   margin: 0;
   font-family: "Open Sans";
   -webkit-font-smoothing: antialiased;

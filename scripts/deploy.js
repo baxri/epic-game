@@ -1,18 +1,18 @@
 const main = async () => {
-  // Contract deployed to: 0xAD20A35358f564207ff21Aa30e36AF8cf7bAA722
+  // Goerli Contract deployed to: 0xAaba1b056aBd1375681fE6E07F8f328aAbA216AE
+  // HardHat: Contract deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
   const gameContractFactory = await hre.ethers.getContractFactory("MyEpicGame");
-
   const gameContract = await gameContractFactory.deploy(
     ["Joel", "Ellie", "Abby"],
     [
-      "https://ipfs.io/ipfs/QmbVcBiUNr1SoiaZGCL4CJaCfMhpRaK3ie3ofqtBPbe3AX?filename=joel.jpeg",
-      "https://i.imgur.com/xVu4vFL.png",
-      "https://i.imgur.com/u7T87A6.png",
+      "https://ik.imagekit.io/epicgame/epic-game/joel.jpeg?tr=w-400,h-500",
+      "https://ik.imagekit.io/epicgame/epic-game/Ellie.webp?tr=w-400,h-500",
+      "https://ik.imagekit.io/epicgame/epic-game/abby.jpeg?tr=w-400,h-500",
     ],
     [250, 200, 300],
     [30, 20, 40],
     "Bloater",
-    "https://i.imgur.com/AksR0tt.png",
+    "https://ik.imagekit.io/epicgame/epic-game/boss.jpeg?tr=w-400,h-500",
     10000,
     50
   );

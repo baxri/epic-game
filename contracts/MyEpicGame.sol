@@ -15,6 +15,15 @@ import "./libraries/Base64.sol";
 
 contract MyEpicGame is ERC721 {
     uint randNonce = 0; // this is used to help ensure that the algorithm has different inputs every time
+    uint rewardHp = 50;
+    uint public totalPayedHp;
+    address owner;
+
+    enum AttackState {
+        SUCCESS,
+        MISSED,
+        BOSS_DEAD
+    }
 
     struct BigBoss {
         string name;
@@ -48,7 +57,7 @@ contract MyEpicGame is ERC721 {
         uint256 tokenId,
         uint256 characterIndex
     );
-    event AttackComplete(address sender, uint newBossHp, uint newPlayerHp);
+    event AttackComplete(AttackState state);
 
     constructor(
         string[] memory characterNames,
@@ -60,6 +69,7 @@ contract MyEpicGame is ERC721 {
         uint bossHp,
         uint bossAttackDamage
     ) ERC721("Heroes", "HERO") {
+        owner = msg.sender;
         // Initialize the boss. Save it to our global "bigBoss" state variable.
         bigBoss = BigBoss({
             name: bossName,
@@ -68,13 +78,6 @@ contract MyEpicGame is ERC721 {
             maxHp: bossHp,
             attackDamage: bossAttackDamage
         });
-
-        console.log(
-            "Done initializing boss %s w/ HP %s, img %s",
-            bigBoss.name,
-            bigBoss.hp,
-            bigBoss.imageURI
-        );
 
         // All the other character code is below here is the same as before, just not showing it to keep things short!
 
@@ -90,14 +93,6 @@ contract MyEpicGame is ERC721 {
                     maxHp: characterHp[i],
                     attackDamage: characterAttackDmg[i]
                 })
-            );
-
-            CharacterAttributes memory c = defaultCharacters[i];
-            console.log(
-                "Done initializing %s w/ HP %s, img %s",
-                c.name,
-                c.hp,
-                c.imageURI
             );
         }
 
@@ -139,12 +134,6 @@ contract MyEpicGame is ERC721 {
             maxHp: defaultCharacters[_characterIndex].maxHp,
             attackDamage: defaultCharacters[_characterIndex].attackDamage
         });
-
-        console.log(
-            "Minted NFT w/ tokenId %s and characterIndex %s",
-            newItemId,
-            _characterIndex
-        );
 
         // Keep an easy way to see who owns what NFT.
         nftHolders[msg.sender] = newItemId;
@@ -205,6 +194,19 @@ contract MyEpicGame is ERC721 {
         return bigBoss;
     }
 
+    function buyHp() external payable {
+        require(msg.value == 0.001 ether, "You should send exactlly 0.001 ETH");
+
+        // Get the tokenId of the user's character NFT
+        uint256 userNftTokenId = nftHolders[msg.sender];
+        // If the user has a tokenId in the map, return their character.
+
+        require(userNftTokenId > 0, "You should have NFT character");
+
+        nftHolderAttributes[userNftTokenId].hp += 50;
+        totalPayedHp += msg.value;
+    }
+
     function checkIfUserHasNFT()
         public
         view
@@ -229,18 +231,6 @@ contract MyEpicGame is ERC721 {
         CharacterAttributes storage player = nftHolderAttributes[
             nftTokenIdOfPlayer
         ];
-        console.log(
-            "\nPlayer w/ character %s about to attack. Has %s HP and %s AD",
-            player.name,
-            player.hp,
-            player.attackDamage
-        );
-        console.log(
-            "Boss %s has %s HP and %s AD",
-            bigBoss.name,
-            bigBoss.hp,
-            bigBoss.attackDamage
-        );
 
         // Make sure the player has more than 0 HP.
         require(player.hp > 0, "Error: character must have HP to attack boss.");
@@ -251,35 +241,38 @@ contract MyEpicGame is ERC721 {
             "Error: boss must have HP to attack character."
         );
 
-        console.log("%s swings at %s...", player.name, bigBoss.name);
         if (bigBoss.hp < player.attackDamage) {
             bigBoss.hp = 0;
-            console.log("The boss is dead!");
+            emit AttackComplete(AttackState.BOSS_DEAD);
         } else {
             if (randomInt(10) > 5) {
                 // by passing 10 as the mod, we elect to only grab the last digit (0-9) of the hash!
                 bigBoss.hp = bigBoss.hp - player.attackDamage;
-                console.log(
-                    "%s attacked boss. New boss hp: %s",
-                    player.name,
-                    bigBoss.hp
-                );
+
+                player.hp = player.hp + rewardHp;
+
+                emit AttackComplete(AttackState.SUCCESS);
             } else {
-                console.log("%s missed!\n", player.name);
+                if (player.hp < bigBoss.attackDamage) {
+                    player.hp = 0;
+                } else {
+                    player.hp = player.hp - bigBoss.attackDamage;
+                }
+
+                emit AttackComplete(AttackState.MISSED);
             }
         }
+    }
 
-        // Allow boss to attack player.
-        if (player.hp < bigBoss.attackDamage) {
-            player.hp = 0;
-        } else {
-            player.hp = player.hp - bigBoss.attackDamage;
-        }
+    function withdraw() external payable {
+        require(owner == msg.sender, "Only owner can withdraw money");
+        require(
+            address(this).balance >= 0,
+            "Not enough funds in contract balance."
+        );
 
-        // Console for ease.
-        console.log("Player attacked boss. New boss hp: %s", bigBoss.hp);
-        console.log("Boss attacked player. New player hp: %s\n", player.hp);
-
-        emit AttackComplete(msg.sender, bigBoss.hp, player.hp);
+        (bool success, ) = owner.call{value: address(this).balance}("");
+        totalPayedHp = 0;
+        require(success, "Withdrawal failed.");
     }
 }
