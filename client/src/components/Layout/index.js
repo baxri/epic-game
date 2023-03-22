@@ -1,9 +1,15 @@
 import classNames from "classnames";
+import { Howl } from "howler";
+import { useEffect, useState } from "react";
+
 import { useGameContext } from "../../context";
 import useAccount from "../../hooks/useAccount";
 
 export default function Layout({ children, isArena }) {
   const { isConnected, address, connect, disconnect } = useAccount();
+  const [sound, setSound] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const {
     characterNFT,
     handleBuy,
@@ -11,6 +17,13 @@ export default function Layout({ children, isArena }) {
   } = useGameContext();
 
   const isBuying = isBuyStarted || isBuyLoading;
+
+  useEffect(() => {
+    const sound = new Howl({
+      src: "/audio/bg.mp3",
+    });
+    setSound(sound);
+  }, []);
 
   const handleConnection = () => {
     if (isConnected) {
@@ -78,7 +91,7 @@ export default function Layout({ children, isArena }) {
             send and transfer, as well as view their health points on the
             OpenSea platform. Sounds good? :)
           </p>
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <button
               onClick={handleConnection}
               className="mt-10 bg-primary px-6 py-3 text-white branded-text rounded text-xl"
@@ -86,6 +99,20 @@ export default function Layout({ children, isArena }) {
               {isConnected
                 ? address.slice(0, 6) + "..." + address.slice(38, 42)
                 : "Get started"}
+            </button>
+            <button
+              onClick={() => {
+                if (isPlaying) {
+                  sound.pause();
+                  setIsPlaying(false);
+                } else {
+                  sound.play();
+                  setIsPlaying(true);
+                }
+              }}
+              className="mt-10 bg-orange-500 px-6 py-3 text-white branded-text rounded text-xl"
+            >
+              {!isPlaying ? "Play Music" : "Stop Music"}
             </button>
           </div>
         </div>
