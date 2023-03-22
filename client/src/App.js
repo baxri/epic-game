@@ -1,33 +1,19 @@
-import {
-  configureChains,
-  mainnet,
-  createClient,
-  WagmiConfig,
-  goerli,
-} from "wagmi";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 import { publicProvider } from "wagmi/providers/public";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { hardhat } from "wagmi/chains";
-import { InjectedConnector } from "@wagmi/core";
+import { polygon } from "wagmi/chains";
 
 import "react-toastify/dist/ReactToastify.css";
 
 import HomeScreen from "./screens/HomeScreen";
-import ArenaScreen from "./screens/ArenaScreen";
 
 import { GameProvider } from "./context";
 
 const { provider, webSocketProvider } = configureChains(
-  [goerli],
+  [polygon],
   [publicProvider()]
 );
 
@@ -43,7 +29,7 @@ function App() {
       <GameProvider>
         <Router>
           <Routes>
-            <Route path="/play" element={<HomeScreen />} />
+            <Route path="/" element={<HomeScreen />} />
           </Routes>
           <ToastContainer />
         </Router>

@@ -7,8 +7,8 @@
     "test": "npx hardhat test",
     "start": "npx hardhat node",
     "build": "npx hardhat run ./scripts/deploy.js --network localhost",
-    "verify": "npx hardhat verify --constructor-args arguments.js --network goerli",
-    "build-goerli": "npx hardhat run ./scripts/deploy.js --network goerli"
+    "build-polygon": "npx hardhat run ./scripts/deploy.js --network polygon",
+    "verify-polygon": "npx hardhat verify --constructor-args arguments.js --network polygon 0xcf1f5294BD518705bc3d3D1595a7c2B52Dc05052"
   },
   "keywords": [],
   "author": "",

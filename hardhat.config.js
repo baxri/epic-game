@@ -4,7 +4,7 @@ require("@nomicfoundation/hardhat-toolbox");
 module.exports = {
   solidity: "0.8.17",
   etherscan: {
-    apiKey: "RBVXD6J2539ANTJ63IQK83SXSQFTNCR3F7",
+    apiKey: "",
   },
   networks: {
     hardhat: {
@@ -13,11 +13,11 @@ module.exports = {
         interval: 5000,
       },
     },
-    goerli: {
-      url: "https://rough-wild-sunset.ethereum-goerli.discover.quiknode.pro/4e452e16a9021702f857a2adb3aa69d8ac6f12bc/",
-      accounts: [
-        "",
-      ],
+    polygon: {
+      url: "https://rpc-mainnet.maticvigil.com",
+      accounts: [""],
+      gas: "auto",
+      gasPrice: "auto",
     },
   },
 };

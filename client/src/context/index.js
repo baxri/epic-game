@@ -9,9 +9,10 @@ import {
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
 
-import MyEpicGameJson from "../abi/MyEpicGame.json";
 import useAccount from "../hooks/useAccount";
-const CONTRACT_ADDRESS = "0xAaba1b056aBd1375681fE6E07F8f328aAbA216AE";
+
+import MyEpicGameJson from "../abi/MyEpicGame.json";
+const CONTRACT_ADDRESS = "0xcf1f5294BD518705bc3d3D1595a7c2B52Dc05052";
 
 // import MyEpicGameJson from "../abi/MyEpicGameLocal.json";
 // const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
@@ -176,6 +177,7 @@ export function GameProvider(props) {
 
       starMinting();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintIndex]);
 
   return (

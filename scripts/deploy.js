@@ -1,5 +1,7 @@
 const main = async () => {
-  // Goerli Contract deployed to: 0xAaba1b056aBd1375681fE6E07F8f328aAbA216AE
+  // Polygon Contract deployed to: 0xcf1f5294BD518705bc3d3D1595a7c2B52Dc05052
+  // https://polygonscan.com/address/0xcf1f5294BD518705bc3d3D1595a7c2B52Dc05052#code
+
   // HardHat: Contract deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
   const gameContractFactory = await hre.ethers.getContractFactory("MyEpicGame");
   const gameContract = await gameContractFactory.deploy(

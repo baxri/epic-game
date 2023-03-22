@@ -68,7 +68,7 @@ contract MyEpicGame is ERC721 {
         string memory bossImageURI,
         uint bossHp,
         uint bossAttackDamage
-    ) ERC721("Heroes", "HERO") {
+    ) ERC721("The last of us", "HERO") {
         owner = msg.sender;
         // Initialize the boss. Save it to our global "bigBoss" state variable.
         bigBoss = BigBoss({
